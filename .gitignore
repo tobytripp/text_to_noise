@@ -2,3 +2,6 @@
 .bundle
 Gemfile.lock
 pkg/*
+
+# osx noise
+.DS_Store

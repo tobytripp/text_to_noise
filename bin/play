@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+require './lib/tail_sounds'
+
+player = TailSounds::Player.new
+
+ARGV.each do |sound|
+  player.play sound
+  sleep 1
+end
+
+sleep 1 while player.playing?
