@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require './lib/tail_sounds'
+
+TailSounds::LogReader.new( $stdin ).call

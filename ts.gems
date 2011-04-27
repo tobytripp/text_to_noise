@@ -1,0 +1,2 @@
+bundler -v1.0.12
+rspec -v2.5.0

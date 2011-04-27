@@ -17,7 +17,7 @@ Sound.autoload_dirs << File.join( APP_ROOT, "sounds" )
 # http://rubygame.org/wiki/NamedResources_tutorial#Autoloading_Resources
 sound = Sound[mp3]
 # sound = Sound.load mp3
-sound.play :fade_in => 2, :stop_after => 5
+sound.play :stop_after => 4, :fade_out => 2
 
 while sound.playing?
   sleep 1

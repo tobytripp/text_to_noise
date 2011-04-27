@@ -1,1 +1,4 @@
 rvm --create 1.9.2@sounds
+
+[[ -s "ts.gems" ]] && rvm gemset import ts.gems
+bundle install
