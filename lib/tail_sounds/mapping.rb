@@ -20,7 +20,9 @@ module TailSounds
     end
 
     def to( sound )
-      self.target = Proc.new { TailSounds.player.play sound }
+      s = sound
+      s += ".wav" unless sound =~ /.wav$/
+      self.target = Proc.new { TailSounds.player.play s }
     end
 
     def call()

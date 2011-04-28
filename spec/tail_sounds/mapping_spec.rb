@@ -7,10 +7,10 @@ describe TailSounds::Mapping do
       mapping.target.should be_a( Proc )
     end
   end
-  
+
   describe "#===" do
     subject { described_class.new /green/ }
-      
+
     it "returns true when the input matches its regex" do
       subject.should === "green"
     end
@@ -24,15 +24,22 @@ describe TailSounds::Mapping do
     subject { described_class.new /green/ }
 
     before { TailSounds.player = double( TailSounds::Player ) }
-    
+
     it "sets the target of the mapping to a Proc" do
       subject.to( "bar" )
       subject.target.should be_a( Proc )
     end
 
     it "sets the target to call Player#play on #call" do
+      subject.to( "bar.wav" )
+      TailSounds.player.should_receive( :play ).with "bar.wav"
+
+      subject.target.call
+    end
+
+    it "automatically appends .wav, if it's not present" do
       subject.to( "bar" )
-      TailSounds.player.should_receive( :play ).with "bar"
+      TailSounds.player.should_receive( :play ).with "bar.wav"
 
       subject.target.call
     end

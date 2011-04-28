@@ -14,6 +14,9 @@ module TailSounds
     
     def run
       LogReader.new( options[:input], mapping ).call
+      while TailSounds.player.playing?
+        sleep 1
+      end
     end
   end
 end
