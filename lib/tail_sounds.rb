@@ -6,6 +6,7 @@ Dir["#{LIB_DIR}/tail_sounds/*.rb"].each { |lib|
   lib =~ %r<lib/(.*)\.rb$>
   require $1
 }
+require 'logger'
 
 module TailSounds
   def self.player
@@ -14,5 +15,13 @@ module TailSounds
 
   def self.player=( player )
     @player = player
+  end
+
+  def self.logger
+    @logger ||= Logger.new( STDOUT )
+  end
+
+  def self.logger=( logger )
+    @logger = logger
   end
 end

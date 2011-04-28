@@ -3,8 +3,13 @@ module TailSounds
     attr_reader :options, :mapping
     
     def initialize( options={} )
-      @options = options
-      @mapping = Mapping.new options[:config]
+      @options = {
+        input:  $stdin,
+        config: "sound_map.rb"
+      }.merge options
+      @mapping = Mapper.parse File.read( @options[:config] )
+    rescue Errno::ENOENT => e
+      raise ArgumentError, "Could not locate configuration file: '#{@options[:config]}'"
     end
     
     def run

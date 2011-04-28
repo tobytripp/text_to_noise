@@ -1,7 +1,7 @@
 module TailSounds
   class LogReader
     attr_reader :io
-    def initialize( io, mapper=LineToSoundMapper.new )
+    def initialize( io, mapper )
       @io, @mapper = io, mapper
     end
 
