@@ -1,7 +1,7 @@
 module TailSounds
   class Mapping
     include Logging
-    attr_accessor :target
+    attr_accessor :targets
     
     def initialize( expression_or_map )
       case expression_or_map
@@ -19,15 +19,30 @@ module TailSounds
       @regex === other
     end
 
-    def to( sound )
-      s = sound
-      s += ".wav" unless sound =~ /.wav$/
-      self.target = Proc.new { TailSounds.player.play s }
+    def to( sound_or_sounds )
+      if sound_or_sounds.is_a? Array
+        sounds = sound_or_sounds
+      else
+        sounds = [sound_or_sounds]
+      end
+      
+      sounds.each do |sound|
+        s = sound
+        s += ".wav" unless sound =~ /.wav$/
+        self.targets << Proc.new { TailSounds.player.play s }
+      end
     end
 
     def call()
       debug "Calling '#{@regex.inspect}' target..."
       target.call
+    end
+
+    def targets() @targets ||= []; end
+    def target()
+      @i = -1 unless @i
+      @i = (@i + 1) % targets.size
+      self.targets[@i]
     end
   end
 end

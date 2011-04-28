@@ -1,0 +1,6 @@
+match /Rendered/  => "crickets"
+match /Rendering/ => "cardinal"
+match /select/i   => "canary2"
+match /User Load/ => "blue_amazon_macaw"
+match /Processing/ => "finch"
+match /SessionsController#new/ => "hawk"

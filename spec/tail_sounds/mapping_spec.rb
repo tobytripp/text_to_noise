@@ -43,12 +43,23 @@ describe TailSounds::Mapping do
 
       subject.target.call
     end
+
+    it "can accept a list of target files" do
+      subject.to ["foo", "bar", "baz"]
+      TailSounds.player.should_receive( :play ).with "foo.wav"
+      TailSounds.player.should_receive( :play ).with "bar.wav"
+      TailSounds.player.should_receive( :play ).with "baz.wav"
+      
+      subject.target.call
+      subject.target.call
+      subject.target.call
+    end
   end
 
   describe "#call" do
     subject do
       described_class.new( /green/ ).tap do |mapping|
-        mapping.target = Proc.new { "called" }
+        mapping.targets = [Proc.new { "called" }]
       end
     end
 

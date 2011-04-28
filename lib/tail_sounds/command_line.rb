@@ -14,6 +14,7 @@ module TailSounds
     
     def run
       LogReader.new( options[:input], mapping ).call
+      puts "Input processing complete.  Waiting for playback..."
       while TailSounds.player.playing?
         sleep 1
       end
