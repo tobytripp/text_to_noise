@@ -3,6 +3,7 @@ Feature: Mapping input lines to sounds for playback
   Use the mapping configuration file to specify which sounds are played for
   each line in the input stream.
 
+  @wip
   Scenario: Mapping a regular expression to a single sound
     Given a file named "sound_mapping.rb" with:
     """

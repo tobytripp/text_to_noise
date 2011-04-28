@@ -13,4 +13,4 @@ OptionParser.new do |opts|
     "Read input to sound mapping configuration from MAPPING_CONFIG" ) { |c| options[:config] = c }
 end.parse!
 
-TailSounds::LogReader.new( options ).call
+TailSounds::CommandLine.new( options ).run

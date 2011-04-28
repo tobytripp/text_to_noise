@@ -44,7 +44,6 @@ describe TailSounds::CommandLine do
 
     it "calls #call on the LogReader" do
       reader.should_receive :call
-      
       subject.run
     end
   end
