@@ -1,0 +1,2 @@
+default: --require features --strict --format pretty --tags ~@wip features
+wip:     --require features --tags @wip:3 --wip features

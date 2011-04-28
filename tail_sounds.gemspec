@@ -16,6 +16,9 @@ Gem::Specification.new do |spec|
   spec.required_rubygems_version = ">= 1.3.6"
 
   spec.add_dependency "rubygame", "~> 2.6.4"
+
+  spec.add_development_dependency "cucumber"
+  spec.add_development_dependency "aruba"
   spec.add_development_dependency "rspec"
   
   spec.files         = `git ls-files`.split("\n")

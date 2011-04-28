@@ -1,5 +1,16 @@
 #!/usr/bin/env ruby
-
+require 'optparse'
 require './lib/tail_sounds'
 
-TailSounds::LogReader.new( $stdin ).call
+options = { :input => $stdin }
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: #{$0} [options]"
+
+  opts.on( "-f", "--file FILE",
+    "Read input from FILE.  Defaults to stdin" ) { |f| options[:input] = File.open( f, "r" ) }
+  opts.on( "-m", "--mapping MAPPING_CONFIG",
+    "Read input to sound mapping configuration from MAPPING_CONFIG" ) { |c| options[:config] = c }
+end.parse!
+
+TailSounds::LogReader.new( options ).call

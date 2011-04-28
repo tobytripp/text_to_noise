@@ -1,14 +1,18 @@
-begin
-  require 'rubygame'
-rescue LoadError
-  require 'rubygems'
-  require 'rubygame'
-end
-
 LIB_DIR   = File.dirname File.expand_path( __FILE__ )
 APP_ROOT  = File.join LIB_DIR,  '..'
 $LOAD_PATH << LIB_DIR
 
-require "tail_sounds/player"
-require "tail_sounds/line_to_sound_mapper"
-require "tail_sounds/log_reader"
+Dir["#{LIB_DIR}/tail_sounds/*.rb"].each { |lib|
+  lib =~ %r<lib/(.*)\.rb$>
+  require $1
+}
+
+module TailSounds
+  def self.player
+    @player ||= Player.new
+  end
+
+  def self.player=( player )
+    @player = player
+  end
+end
