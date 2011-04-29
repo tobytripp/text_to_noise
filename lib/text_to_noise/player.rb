@@ -30,7 +30,7 @@ module TextToNoise
       sound = Rubygame::Sound[sound_name]
       raise SoundNotFound, sound_name if sound.nil?
 
-      info "Playing #{sound_name}"
+      debug "Playing #{sound_name}"
       sound.play :fade_out => 2
       @sounds << sound
 
@@ -38,7 +38,7 @@ module TextToNoise
     end
 
     def playing?
-      @sounds.select! &:playing?
+      @sounds = @sounds.select &:playing?
       not @sounds.empty?
     end
   end

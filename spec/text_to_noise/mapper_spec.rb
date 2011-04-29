@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe TextToNoise::Mapper do
   describe ".parse" do
-    let( :mapping ) { double( TextToNoise::Mapping, to: nil ) }
+    let( :mapping ) { double( TextToNoise::Mapping, :to => nil ) }
 
     it "reloads its configuration if it has changed"
     

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe TextToNoise::CommandLine do
   let( :mapping ) { double( TextToNoise::Mapping ) }
-  let( :reader  ) { double( TextToNoise::LogReader, call: nil ) }
+  let( :reader  ) { double( TextToNoise::LogReader, :call => nil ) }
   
   before :each do
     TextToNoise::Mapper.stub!( :parse ).and_return mapping
@@ -18,7 +18,7 @@ describe TextToNoise::CommandLine do
     it "raises an error if the config file cannot be found" do
       File.stub!( :read ).and_raise Errno::ENOENT
       lambda {
-        TextToNoise::CommandLine.new config: "not_found"
+        TextToNoise::CommandLine.new :config => "not_found"
       }.should raise_error( ArgumentError )
     end
 
@@ -27,7 +27,7 @@ describe TextToNoise::CommandLine do
         File.should_receive( :read ).with( "sound_map.rb" ).and_return "config"
         TextToNoise::Mapper.should_receive( :parse ).with( "config" )
         
-        TextToNoise::CommandLine.new config: "sound_map.rb"
+        TextToNoise::CommandLine.new :config => "sound_map.rb"
       end
     end
   end

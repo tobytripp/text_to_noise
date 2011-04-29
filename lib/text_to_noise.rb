@@ -18,10 +18,11 @@ module TextToNoise
   end
 
   def self.logger
-    @logger ||= Logger.new( STDOUT )
+    @logger ||= Logger.new( STDOUT ).tap { |l| l.level = Logger::INFO }
   end
 
   def self.logger=( logger )
     @logger = logger
+    @logger
   end
 end

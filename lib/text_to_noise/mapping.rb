@@ -29,7 +29,10 @@ module TextToNoise
       sounds.each do |sound|
         s = sound
         s += ".wav" unless sound =~ /.wav$/
-        self.targets << Proc.new { TextToNoise.player.play s }
+        self.targets << Proc.new {
+          info "#{@regex.inspect} -> #{sound}"
+          TextToNoise.player.play s
+        }
       end
     end
 

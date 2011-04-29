@@ -4,7 +4,6 @@ require 'optparse'
 lib = File.expand_path( '../../lib/', __FILE__ )
 $:.unshift lib unless $:.include?( lib )
 
-puts lib
 require 'text_to_noise'
 
 options = { :input => $stdin }
@@ -18,4 +17,4 @@ OptionParser.new do |opts|
     "Read input to sound mapping configuration from MAPPING_CONFIG" ) { |c| options[:config] = c }
 end.parse!
 
-TailSounds::CommandLine.new( options ).run
+TextToNoise::CommandLine.new( options ).run
