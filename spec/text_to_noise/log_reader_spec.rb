@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'stringio'
 
-module TailSounds
+module TextToNoise
   describe LogReader do
     let( :io ) { StringIO.new "phantasm" }
     let( :mapper ) { double( "LineToSoundMapper" ) }

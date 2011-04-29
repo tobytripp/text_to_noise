@@ -2,14 +2,14 @@
 lib = File.expand_path( '../lib/', __FILE__ )
 $:.unshift lib unless $:.include?( lib )
 
-require 'tail_sounds/version'
+require 'text_to_noise/version'
 Gem::Specification.new do |spec|
-  spec.name     = "tail_sounds"
-  spec.version  = TailSounds::VERSION
+  spec.name     = "text_to_noise"
+  spec.version  = TextToNoise::VERSION
   spec.platform = Gem::Platform::RUBY
 
   spec.summary  = "Play sounds based on string matches."
-  spec.description = "Pipe a file, like a log file, into tail_sounds and it will play sound effects triggered by regex matches in the input."
+  spec.description = "Pipe a file, like a log file, into text_to_noise and it will play sound effects triggered by regex matches in the input."
   spec.authors  = ["Toby Tripp"]
   spec.email    = "toby.tripp+tailsounds@gmail.com"
   

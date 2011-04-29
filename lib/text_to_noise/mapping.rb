@@ -1,4 +1,4 @@
-module TailSounds
+module TextToNoise
   class Mapping
     include Logging
     attr_accessor :targets
@@ -29,7 +29,7 @@ module TailSounds
       sounds.each do |sound|
         s = sound
         s += ".wav" unless sound =~ /.wav$/
-        self.targets << Proc.new { TailSounds.player.play s }
+        self.targets << Proc.new { TextToNoise.player.play s }
       end
     end
 

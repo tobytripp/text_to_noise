@@ -1,4 +1,4 @@
-module TailSounds
+module TextToNoise
   class LogReader
     attr_reader :io
     def initialize( io, mapper )
@@ -8,6 +8,7 @@ module TailSounds
     def call()
       while line = io.gets
         @mapper.dispatch line
+        sleep 0.200 # FIXME: Think of a better way to throttle playback.
       end
     end
   end

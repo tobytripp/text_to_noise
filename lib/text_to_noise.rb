@@ -2,13 +2,13 @@ LIB_DIR   = File.dirname File.expand_path( __FILE__ )
 APP_ROOT  = File.join LIB_DIR,  '..'
 $LOAD_PATH << LIB_DIR
 
-Dir["#{LIB_DIR}/tail_sounds/*.rb"].each { |lib|
+Dir["#{LIB_DIR}/text_to_noise/*.rb"].each { |lib|
   lib =~ %r<lib/(.*)\.rb$>
   require $1
 }
 require 'logger'
 
-module TailSounds
+module TextToNoise
   def self.player
     @player ||= Player.new
   end

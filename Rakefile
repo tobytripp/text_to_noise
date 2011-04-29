@@ -1,13 +1,13 @@
 $LOAD_PATH.unshift File.expand_path("../lib", __FILE__)
-require "tail_sounds/version"
+require "text_to_noise/version"
 
 namespace :gem do
   task :build do
-    system "gem build tail_sounds.gemspec"
+    system "gem build text_to_noise.gemspec"
   end
  
   task :release => :build do
-    system "gem push tail_sounds-#{TailSounds::VERSION}"
+    system "gem push text_to_noise-#{TailSounds::VERSION}"
   end
 end
 

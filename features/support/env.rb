@@ -2,7 +2,7 @@ require 'aruba/cucumber'
 lib = File.expand_path( '../../../lib/', __FILE__ )
 $:.unshift lib unless $:.include?( lib )
 
-require 'tail_sounds'
+require 'text_to_noise'
 
 class MockPlayer
   attr_reader :sounds
@@ -17,5 +17,5 @@ class MockPlayer
 end
 
 Before do
-  TailSounds.player = MockPlayer.new
+  TextToNoise.player = MockPlayer.new
 end

@@ -12,7 +12,7 @@ Feature: Mapping input lines to sounds for playback
     """
     And an empty file named "stuff.log"
   
-    When I run `./bin/tail_sounds --mapping sound_mapping.rb --file stuff.log`
+    When I run `./bin/text_to_noise --mapping sound_mapping.rb --file stuff.log`
     And I append to "stuff.log" with:
     """
     caw

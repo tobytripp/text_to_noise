@@ -1,4 +1,4 @@
-module TailSounds
+module TextToNoise
   class Mapper
     include Logging
     attr_accessor :player, :mappings

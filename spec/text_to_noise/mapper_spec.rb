@@ -1,13 +1,15 @@
 require 'spec_helper'
 
-describe TailSounds::Mapper do
+describe TextToNoise::Mapper do
   describe ".parse" do
-    let( :mapping ) { double( TailSounds::Mapping, to: nil ) }
+    let( :mapping ) { double( TextToNoise::Mapping, to: nil ) }
 
+    it "reloads its configuration if it has changed"
+    
     context "given a nil configuration" do
       it "raises an ArgumentError" do
         lambda {
-          TailSounds::Mapper.parse nil
+          TextToNoise::Mapper.parse nil
         }.should raise_error( ArgumentError )
       end
     end
@@ -15,7 +17,7 @@ describe TailSounds::Mapper do
     context "given a blank configuration" do
       it "raises an ArgumentError" do
         lambda {
-          TailSounds::Mapper.parse " \t \n"
+          TextToNoise::Mapper.parse " \t \n"
         }.should raise_error( ArgumentError )
       end
     end
@@ -25,30 +27,30 @@ describe TailSounds::Mapper do
       let( :config  ) { "match( /brown/ ).to \"blue\"" }
 
       it "creates a Mapping object for the given configuration line" do
-        TailSounds::Mapping.should_receive( :new ).with( /brown/ ).and_return mapping
-        TailSounds::Mapper.parse config
+        TextToNoise::Mapping.should_receive( :new ).with( /brown/ ).and_return mapping
+        TextToNoise::Mapper.parse config
       end
 
       it "configures the mapping" do
-        TailSounds::Mapping.stub!( :new ).with( /brown/ ).and_return mapping
+        TextToNoise::Mapping.stub!( :new ).with( /brown/ ).and_return mapping
         mapping.should_receive( :to ).with( "blue" )
         
-        TailSounds::Mapper.parse config
+        TextToNoise::Mapper.parse config
       end
     end
 
     context "given a multiple line configuration" do
       let( :config ) { 'match( /brown/ ).to "blue"; map( /green/ ).to "orange"' }
-      before { TailSounds::Mapping.stub!( :new ).and_return mapping }
+      before { TextToNoise::Mapping.stub!( :new ).and_return mapping }
 
       it "configures the second mapping in addition to the first" do
         mapping.should_receive( :to ).with "blue"
         mapping.should_receive( :to ).with "orange"
-        TailSounds::Mapper.parse config
+        TextToNoise::Mapper.parse config
       end
 
       it "stores the mappings" do
-        TailSounds::Mapper.parse( config ).should have( 2 ).mappings
+        TextToNoise::Mapper.parse( config ).should have( 2 ).mappings
       end
     end
 
@@ -56,8 +58,8 @@ describe TailSounds::Mapper do
       let( :config ) { "match /brown/ => \"blue\"\n" }
 
       it "configures the mapping" do
-        TailSounds::Mapping.should_receive( :new ).with( /brown/ => "blue" ).and_return mapping
-        TailSounds::Mapper.parse config
+        TextToNoise::Mapping.should_receive( :new ).with( /brown/ => "blue" ).and_return mapping
+        TextToNoise::Mapper.parse config
       end
     end
 
@@ -66,7 +68,7 @@ describe TailSounds::Mapper do
       let( :green ) { /green/ }
       let( :blue2 ) { /blu/  }
       
-      subject { TailSounds::Mapper.new.tap { |m| m.mappings = [blue, green, blue2] } }
+      subject { TextToNoise::Mapper.new.tap { |m| m.mappings = [blue, green, blue2] } }
       
       it "iterates over its mappings comparing them to the input with #===" do
         blue.should_receive( :=== ).with( anything )

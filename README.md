@@ -15,8 +15,8 @@ Stuff that I had to do to get this running:
 1. Install the SDL Mixer library.  I used [Homebrew][homebrew]:
     brew install sdl sdl_mixer
 
-2. Install tail_sounds via [Rubygems][rubygems]:
-    gem install rubygame rsdl tail_sounds
+2. Install text_to_noise via [Rubygems][rubygems]:
+    gem install rubygame rsdl text_to_noise
 
 
 Usage
@@ -24,7 +24,7 @@ Usage
 
 Pipe a log into the +tail_sound+ script and it will start chirping:
 
-    tail -f /var/log/mylog | tail_sounds
+    tail -f /var/log/mylog | text_to_noise
 
 
 TODO

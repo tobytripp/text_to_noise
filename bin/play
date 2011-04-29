@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require './lib/tail_sounds'
+require './lib/text_to_noise'
 
 player = TailSounds::Player.new
 

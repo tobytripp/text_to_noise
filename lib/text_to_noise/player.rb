@@ -1,5 +1,7 @@
-module TailSounds
+module TextToNoise
   class Player
+    include Logging
+    
     SOUND_DIR = File.expand_path File.join( APP_ROOT, 'sounds' )
     class SoundNotFound < StandardError
       def initialize( sound_name )
@@ -27,8 +29,12 @@ module TailSounds
     def play( sound_name )
       sound = Rubygame::Sound[sound_name]
       raise SoundNotFound, sound_name if sound.nil?
-      sound.play :stop_after => 3, :fade_out => 2
+
+      info "Playing #{sound_name}"
+      sound.play :fade_out => 2
       @sounds << sound
+
+      debug "#{@sounds.size} sounds in queue" if playing?
     end
 
     def playing?
