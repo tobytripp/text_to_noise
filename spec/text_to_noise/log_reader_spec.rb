@@ -4,7 +4,7 @@ require 'stringio'
 module TextToNoise
   describe LogReader do
     let( :io ) { StringIO.new "phantasm" }
-    let( :mapper ) { double( "LineToSoundMapper" ) }
+    let( :mapper ) { double( "LineToSoundMapper", :dispatch => nil ) }
 
     subject { LogReader.new io, mapper }
     
@@ -16,6 +16,11 @@ module TextToNoise
 
       it "calls #dispatch on an instance of LineToSoundMapper with each line" do
         mapper.should_receive( :dispatch ).with "phantasm"
+        subject.call
+      end
+
+      it "calls TextToNoise.throttle! after each line is processed" do
+        TextToNoise.should_receive( :throttle! )
         subject.call
       end
     end

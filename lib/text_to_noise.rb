@@ -10,20 +10,34 @@ Dir["#{LIB_DIR}/text_to_noise/*.rb"].each { |lib|
 }
 
 module TextToNoise
-  def self.player
+  include Logging
+  
+  def player
     @player ||= Player.new
   end
 
-  def self.player=( player )
+  def player=( player )
     @player = player
   end
 
-  def self.logger
+  def logger
     @logger ||= Logger.new( STDOUT ).tap { |l| l.level = Logger::INFO }
   end
 
-  def self.logger=( logger )
+  def logger=( logger )
     @logger = logger
     @logger
   end
+
+  def throttle_delay=( ms_delay )
+    @delay = ms_delay
+  end
+
+  def throttle!
+    return unless @delay
+    debug "waiting #{@delay}ms (#{@delay / 1_000.0}s)"
+    sleep @delay / 1_000.0
+  end
+
+  extend self
 end

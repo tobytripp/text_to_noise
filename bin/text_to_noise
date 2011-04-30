@@ -23,6 +23,9 @@ arg_parser = OptionParser.new do |opts|
     "Read input to sound mapping configuration from MAPPING_CONFIG" ) { |c| options[:config] = c }
   opts.on( "-m", "--mute",
     "Don't play any sounds, just print what matched" ) { options[:mute] = true }
+  opts.on( "-t", "--throttle DELAY",
+    "Wait DELAY milliseconds before reading the next line of input." ) { |ms| options[:throttle] = ms.to_i }
+  opts.on( "--debug", "Turn on debug logging" ) { options[:debug] = true }
   opts.on_tail("-h", "--help", "Show this message") do
     puts opts
     exit

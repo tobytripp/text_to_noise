@@ -44,6 +44,20 @@ module TextToNoise
           CommandLine.new :mute => true, :config => "sound_map.rb"
         end
       end
+
+      context "when given the 'throttle' option" do
+        it "sets the throttle_delay attribute on TextToNoise" do
+          TextToNoise.should_receive( :throttle_delay= ).with 100
+          CommandLine.new :config => "sound_map.rb", :throttle => 100
+        end
+      end
+
+      context "when given a 'file' option" do
+        it "sets a default throttle_delay" do
+          TextToNoise.should_receive( :throttle_delay= ).with 100
+          CommandLine.new :config => "sound_map.rb", :input => "sample.log"
+        end
+      end
     end
 
     describe "#run" do
