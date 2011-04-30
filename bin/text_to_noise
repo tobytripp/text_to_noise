@@ -12,15 +12,64 @@ options = {
   :config => "sample.sounds.rb"
 }
 
-OptionParser.new do |opts|
+arg_parser = OptionParser.new do |opts|
   opts.banner = "Usage: #{$0} [options]"
-
+  opts.separator ""
+  opts.separator "Options:"
+  
   opts.on( "-f", "--file FILE",
     "Read input from FILE.  Defaults to stdin" ) { |f| options[:input] = File.open( f, "r" ) }
   opts.on( "-c", "--config MAPPING_CONFIG",
     "Read input to sound mapping configuration from MAPPING_CONFIG" ) { |c| options[:config] = c }
   opts.on( "-m", "--mute",
     "Don't play any sounds, just print what matched" ) { options[:mute] = true }
-end.parse!
+  opts.on_tail("-h", "--help", "Show this message") do
+    puts opts
+    exit
+  end
+end
 
-TextToNoise::CommandLine.new( options ).run
+arg_parser.parse!
+
+begin
+  TextToNoise::CommandLine.new( options ).run
+rescue ArgumentError
+  $stderr.puts arg_parser
+  $stderr.puts <<-EOS
+
+ERROR!
+
+Could not locate a noise configuration.
+Specify a configuration with the -c option.
+
+Try this one if you're processing a Rails log:
+
+  match /Rendered/  => %w(crickets canary)
+  match /Rendering/ => "cardinal"
+  match /User Load/ => "nightingale"
+  match /Processing/ => "finch"
+  match /SessionsController#new/ => "owl"
+  match /404 Not Found/ => "hawk"
+
+Or maybe you're watching your ssh access:
+
+  match /sshd.*Accepted/ => %w[rooster hawk chicken crow]
+
+Copy one of those into a file and pass it along to text_to_noise.
+
+For example:
+
+  echo 'match /sshd.*Accepted/ => %w[rooster hawk chicken crow]' > ssh.sounds.rb
+  tail -f /var/log/secure.log | text_to_noise -c ssh.sounds.rb
+
+Still having problems?
+  Try logging an issue at https://github.com/tobytripp/text_to_noise/issues
+  or try bothering me on Twitter http://twitter.com/tobytripp
+
+
+Thanks for playing!
+
+
+EOS
+  exit 1
+end
