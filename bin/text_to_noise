@@ -6,15 +6,17 @@ $:.unshift lib unless $:.include?( lib )
 
 require 'text_to_noise'
 
-options = { :input => $stdin }
+options = { :input => $stdin, :mute => false }
 
 OptionParser.new do |opts|
   opts.banner = "Usage: #{$0} [options]"
 
   opts.on( "-f", "--file FILE",
     "Read input from FILE.  Defaults to stdin" ) { |f| options[:input] = File.open( f, "r" ) }
-  opts.on( "-m", "--mapping MAPPING_CONFIG",
+  opts.on( "-c", "--config MAPPING_CONFIG",
     "Read input to sound mapping configuration from MAPPING_CONFIG" ) { |c| options[:config] = c }
+  opts.on( "-m", "--mute",
+    "Don't play any sounds, just print what matched" ) { options[:mute] = true }
 end.parse!
 
 TextToNoise::CommandLine.new( options ).run

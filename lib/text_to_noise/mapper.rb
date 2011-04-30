@@ -1,7 +1,7 @@
 module TextToNoise
   class Mapper
     include Logging
-    attr_accessor :player, :mappings
+    attr_accessor :mappings
 
     def initialize()
       @mappings = []
@@ -25,9 +25,15 @@ module TextToNoise
     protected
 
     def match( expression )
-      debug "Creating map for #{expression.inspect}"
-      mappings << mapping = Mapping.new( expression )
-      mapping
+      if expression.kind_of?( Hash ) && expression.size > 1
+        expression.each do |k,v|
+          match k => v
+        end
+      else
+        debug "Creating map for #{expression.inspect}"
+        mappings << mapping = Mapping.new( expression )
+        mapping
+      end
     end
     alias_method :map, :match
   end
