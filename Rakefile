@@ -1,6 +1,9 @@
 $LOAD_PATH.unshift File.expand_path("../lib", __FILE__)
 require "text_to_noise/version"
 
+require 'bundler'
+Bundler::GemHelper.install_tasks
+
 namespace :gem do
   task :build do
     system "gem build text_to_noise.gemspec"
