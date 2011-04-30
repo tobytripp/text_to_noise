@@ -10,14 +10,7 @@ module TextToNoise
     end
     
     def initialize()
-      begin
-        require 'rubygame'
-      rescue LoadError
-        require 'rubygems'
-        require 'rubygame'
-      end
-
-      raise "No Mixer found!  Make sure sdl_mixer is installed." unless defined? Rubygame::Sound
+      self.class.load_rubygame
       
       Rubygame::Sound.autoload_dirs << SOUND_DIR
       themes = Dir.new(SOUND_DIR).entries.reject { |e| e =~ /[.]/ }
@@ -40,6 +33,31 @@ module TextToNoise
     def playing?
       @sounds = @sounds.select &:playing?
       not @sounds.empty?
+    end
+
+    def available_sounds()
+      Rubygame::Sound.autoload_dirs.map do |dir|
+        Dir[ "#{dir}/*.wav" ].map { |f| File.basename f }
+      end.flatten
+    end
+
+    def self.load_rubygame()
+      old_verbose, $VERBOSE = $VERBOSE, nil
+      old_stream, stream = $stdout.dup, $stdout
+      stream.reopen '/dev/null'
+      stream.sync = true
+      
+      begin
+        require 'rubygame'
+      rescue LoadError
+        require 'rubygems'
+        require 'rubygame'
+      end
+      
+      raise "No Mixer found!  Make sure sdl_mixer is installed." unless defined? Rubygame::Sound
+    ensure
+      $VERBOSE = old_verbose
+      stream.reopen(old_stream)
     end
   end
 end

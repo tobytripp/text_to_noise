@@ -7,10 +7,17 @@ require 'text_to_noise'
 
 player = TextToNoise::Player.new
 
-ARGV.each do |sound|
-  sound += ".wav" unless sound =~ /\.wav$/
-  player.play sound
-  sleep 1
+begin
+  ARGV.each do |sound|
+    sound += ".wav" unless sound =~ /\.wav$/
+    player.play sound
+    sleep 1
+  end
+rescue TextToNoise::Player::SoundNotFound => e
+  $stderr.puts e.message
+  $stderr.puts "Sorry, but I know how to play these sounds:\n"
+  $stderr.print "\t"
+  $stderr.puts player.available_sounds.join( "\n\t" )
 end
 
 sleep 1 while player.playing?
