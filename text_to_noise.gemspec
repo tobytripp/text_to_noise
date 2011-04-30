@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.summary  = "Play sounds based on string matches."
   spec.description = "Pipe a file, like a log file, into text_to_noise and it will play sound effects triggered by regex matches in the input."
-  spec.authors  = ["Toby Tripp"]
+  spec.authors  = ["Toby Tripp", "Lydia Tripp"]
   spec.email    = "toby.tripp+tailsounds@gmail.com"
   
   spec.required_rubygems_version = ">= 1.3.6"
