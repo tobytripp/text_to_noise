@@ -16,7 +16,7 @@ Stuff that I had to do to get this running:
     brew install sdl sdl_mixer
 
 2. Install text_to_noise via [Rubygems][rubygems]:
-    gem install rubygame rsdl text_to_noise
+    gem install rsdl text_to_noise
 
 
 Usage
@@ -30,9 +30,9 @@ Pipe a log into the +tail_sound+ script and it will start chirping:
 TODO
 ----
 
-This is just getting started and is not really useful yet.  Soon we'll be able to:
-
- * Define a mapping between regular expressions and sounds we'd like to play
+  * Automatically refresh configurations
+  * Add generators to create stub configurations
+  * Support sound themes?
 
 
 [Homebrew]:http://mxcl.github.com/homebrew

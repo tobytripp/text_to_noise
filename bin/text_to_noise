@@ -6,7 +6,11 @@ $:.unshift lib unless $:.include?( lib )
 
 require 'text_to_noise'
 
-options = { :input => $stdin, :mute => false }
+options = {
+  :input  => $stdin,
+  :mute   => false,
+  :config => "sample.sounds.rb"
+}
 
 OptionParser.new do |opts|
   opts.banner = "Usage: #{$0} [options]"

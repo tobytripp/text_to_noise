@@ -4,8 +4,7 @@ module TextToNoise
     
     def initialize( options={} )
       @options = {
-        :input  =>  $stdin,
-        :config => "sound_map.rb"
+        :input  =>  $stdin
       }.merge options
       @mapping = Mapper.parse File.read( @options[:config] )
       TextToNoise.player = self.player
