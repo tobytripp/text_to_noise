@@ -62,3 +62,19 @@ Feature: Mapping input lines to sounds for playback
     
     Then the output should contain "Playing slow_query.wav"
      And the output should not contain "Playing slow_request.wav"
+
+  Scenario: Inputs that match multiple rules should fire all sounds
+    Given a file named "sound_mapping.rb" with:
+    """
+    map /caw/ => "crow", /bakawk/ => "chicken"
+    """
+
+    And a file named "input.log" with:
+    """
+    caw    bakawk!
+    """
+
+    When I run `text_to_noise -c sound_mapping.rb -f input.log -m`
+
+    Then the output should contain "Playing crow.wav"
+     And the output should contain "Playing chicken.wav"

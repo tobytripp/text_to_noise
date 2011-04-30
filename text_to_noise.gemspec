@@ -18,6 +18,8 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "rubygame", "~> 2.6.4"
 
+  spec.requirements << "SDL_mixer [http://www.libsdl.org/projects/SDL_mixer/]"
+
   spec.add_development_dependency "cucumber"
   spec.add_development_dependency "aruba"
   spec.add_development_dependency "rspec"
