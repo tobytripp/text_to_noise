@@ -1,1 +1,1 @@
-map( /caw/ ).to "crow"
+map /caw/ => "crow", /bakawk/ => "chicken"
