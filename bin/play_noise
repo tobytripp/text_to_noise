@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+lib = File.expand_path( '../../lib/', __FILE__ )
+$:.unshift lib unless $:.include?( lib )
+
+require 'text_to_noise'
+
+player = TextToNoise::Player.new
+
+ARGV.each do |sound|
+  sound += ".wav" unless sound =~ /\.wav$/
+  player.play sound
+  sleep 1
+end
+
+sleep 1 while player.playing?
