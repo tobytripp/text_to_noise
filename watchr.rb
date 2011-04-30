@@ -44,7 +44,7 @@ watch( '^spec/spec_helper\.rb'         ) { |m| execute "rake spec" }
 watch( '^spec/support/.*'              ) { |m| execute "rake spec" }
 watch( '^lib/([^/]+)/(.*)\.rb'         ) { |m| specs_matching m[1], m[2]   }
 watch( '^features/step_definitions/.*' ) { |m| execute "cucumber features" }
-watch( '^features/([^/]+\.feature)'     ) { |m|
+watch( '^features/([^/]+\.feature)'    ) { |m|
   execute "cucumber #{m[0]}" unless m[1].include? "step_definitions"
 }
 

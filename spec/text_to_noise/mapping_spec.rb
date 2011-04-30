@@ -7,7 +7,10 @@ describe TextToNoise::Mapping do
       mapping.target.should be_a( Proc )
     end
 
-    it "can accept a Proc"
+    it "stores a passed block for use in later matching" do
+      mapping = described_class.new(  /exp/ => "target" ) { |md| true }
+      mapping.matcher_proc.should be_a( Proc )
+    end
   end
 
   describe "#===" do
@@ -24,7 +27,17 @@ describe TextToNoise::Mapping do
     end
 
     context "when matching against a Proc" do
-      it "passes the match string to the Proc"
+      subject do
+        described_class.new( /green (\d+)/ ) { |match_data| match_data[1].to_i > 5 }
+      end
+
+      it "matches if the block returns true" do
+        should === "green 6"
+      end
+
+      it "does not match if the block returns false" do
+        should_not === "green 1"
+      end
     end
   end
 

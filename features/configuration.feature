@@ -39,26 +39,26 @@ Feature: Mapping input lines to sounds for playback
     Then the output should contain "Playing crow.wav"
      And the output should contain "Playing chicken.wav"
 
-  @wip
   Scenario: Configuring a dynamic matcher with a block
     Given a file named "sound_mapping.rb" with:
     """
-    map( /ping (\d+)/ ) { |match_data|
-    match_data[1].to_i > 5
-    }.to "ping"
+    map( /Completed in (\d+)ms/ ) { |match_data|
+      match_data[1].to_i > 500
+    }.to "slow_request"
 
-    map( /pong (\d+)/ ) { |match_data|
-    match_data[1].to_i > 5
-    }.to "pong"
+    map( /Load \(([\d.]+)ms\)/ ) { |match_data|
+      match_data[1].to_i > 5
+    }.to "slow_query"
+
     """
 
     And a file named "input.log" with:
     """
-    ping 1
-    pong 7
+    Completed in 250ms
+    User Load (7.1ms)
     """
 
     When I run `text_to_noise -c sound_mapping.rb -f input.log -m`
     
-    Then the output should contain "Playing pong.wav"
-     And the output should not contain "Playing ping.wav"
+    Then the output should contain "Playing slow_query.wav"
+     And the output should not contain "Playing slow_request.wav"
