@@ -1,11 +1,11 @@
 require 'spec_helper'
 module TextToNoise
   describe Mapper do
+    it "reloads its configuration if it has changed"
+      
     describe ".parse" do
       let( :mapping ) { double( Mapping, :to => nil ) }
 
-      it "reloads its configuration if it has changed"
-      
       context "given a nil configuration" do
         it "raises an ArgumentError" do
           lambda {
@@ -21,7 +21,6 @@ module TextToNoise
           }.should raise_error( ArgumentError )
         end
       end
-
       
       context "given a single line configuration" do
         let( :config  ) { "match( /brown/ ).to \"blue\"" }
@@ -73,28 +72,28 @@ module TextToNoise
           Mapper.parse config
         end
       end
+    end
 
-      describe "#dispatch" do
-        let( :blue )  { /blue/  }
-        let( :green ) { /green/ }
-        let( :blue2 ) { /blu/  }
+    describe "#dispatch" do
+      let( :blue )  { /blue/  }
+      let( :green ) { /green/ }
+      let( :blue2 ) { /blu/  }
+      
+      subject { Mapper.new.tap { |m| m.mappings = [blue, green, blue2] } }
+      
+      it "iterates over its mappings comparing them to the input with #===" do
+        blue.should_receive( :=== ).with( anything )
+        green.should_receive( :=== ).with( anything )
         
-        subject { Mapper.new.tap { |m| m.mappings = [blue, green, blue2] } }
+        subject.dispatch "orange"
+      end
+      
+      it "calls #call on all mappings that matched" do
+        blue.should_receive :call
+        blue2.should_receive :call
+        green.should_not_receive :call
         
-        it "iterates over its mappings comparing them to the input with #===" do
-          blue.should_receive( :=== ).with( anything )
-          green.should_receive( :=== ).with( anything )
-
-          subject.dispatch "orange"
-        end
-
-        it "calls #call on all mappings that matched" do
-          blue.should_receive :call
-          blue2.should_receive :call
-          green.should_not_receive :call
-          
-          subject.dispatch( "blue" )
-        end
+        subject.dispatch( "blue" )
       end
     end
   end

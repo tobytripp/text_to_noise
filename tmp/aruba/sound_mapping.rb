@@ -1,1 +1,0 @@
-map /caw/ => "crow", /bakawk/ => "chicken"
