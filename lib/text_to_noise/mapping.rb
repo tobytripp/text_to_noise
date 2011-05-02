@@ -8,8 +8,8 @@ module TextToNoise
       when Regexp
         @regex = expression_or_map
       when Hash
-        @regex = expression_or_map.keys.first
-        self.to expression_or_map[@regex]
+        @regex, target = expression_or_map.to_a.flatten
+        self.to target
       else
         raise ArgumentError, "Unrecognized Mapping configuration: #{expression_or_map.inspect}"
       end

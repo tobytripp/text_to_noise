@@ -78,3 +78,35 @@ Feature: Mapping input lines to sounds for playback
 
     Then the output should contain "Playing crow.wav"
      And the output should contain "Playing chicken.wav"
+
+  @wip
+  Scenario: Throttling a match
+    Given a file named "sound_mapping" with:
+    """
+    map /Rendered/ => 'crickets', :every => 5
+    map( /page/ ).to( 'crickets' ).every( 5 )
+    """
+
+    And a file named "input.short.log" with:
+    """
+    Rendered a page
+    Rendered a page
+    Rendered a page
+    """
+
+    And a file named "input.long.log" with:
+    """
+    Rendered a page
+    Rendered a page
+    Rendered a page
+    Rendered a page
+    Rendered a page
+    """
+
+    When I run `text_to_noise -c sound_mapping -f input.short.log -m`
+
+    Then the output should not contain "Playing crickets.wav"
+
+    When I run `text_to_noise -c sound_mapping -f input.long.log -m`
+
+    Then the output should contain "Playing crickets.wav"

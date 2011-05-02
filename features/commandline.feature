@@ -13,12 +13,13 @@ Feature: Running text_to_noise
 
     Try this one if you're processing a Rails log:
 
-      match /Rendered/  => %w(crickets canary)
-      match /Rendering/ => "cardinal"
-      match /User Load/ => "nightingale"
-      match /Processing/ => "finch"
-      match /SessionsController#new/ => "owl"
+      match /User Load/     => "nightingale"
+      match /Processing/    => "finch"
       match /404 Not Found/ => "hawk"
+      match /SessionsController#new/ => "owl"
+
+    you'll probably want to tune this yourself.  It can get a bit ridiculous if
+    you have any substantial amount of traffic.
 
     Or maybe you're watching your ssh access:
 

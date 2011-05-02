@@ -119,7 +119,9 @@ At the moment, this only supports playing some free bird songs that are included
 Highest priority is the ability to add your own sound sets for playback.
 
   * Add sounds to the available noises for playback
+  * Capistrano integration
   * Automatically refresh configurations
+  * Add an 'every' option to throttle sounds for comman events
   * Add generators to create stub configurations
   * Support sound themes?
 
