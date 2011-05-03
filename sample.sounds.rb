@@ -2,5 +2,5 @@
 # match /Rendering/ => "cardinal"
 match /User Load/ => %w"nightingale crickets canary"
 match /Processing/ => "crickets"
-match /SessionsController#new/ => "owl"
+match /SessionsController#new/ => "owl-short"
 match /404 Not Found/ => "hawk"
