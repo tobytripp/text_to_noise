@@ -2,21 +2,29 @@
 module TextToNoise
   class Mapping
     include Logging
-    attr_accessor :targets, :matcher_proc
+    attr_accessor :targets, :matcher_proc, :matcher_conditions
     
     def initialize( expression_or_map, &block )
+      @matcher_conditions = []
+
       case expression_or_map
       when Regexp
         @regex = expression_or_map
       when Hash
-        @regex, target = expression_or_map.to_a.flatten
-        self.to target
+        expression_or_map.each do |k,v|
+          case k
+          when Regexp
+            @regex = k
+            self.to v
+          else
+            self.send k.to_sym, v
+          end
+        end
       else
         raise ArgumentError, "Unrecognized Mapping configuration: #{expression_or_map.inspect}"
       end
 
       @matcher_proc = block if block_given?
-      @matcher_conditions = []
     end
 
     def ===( other )

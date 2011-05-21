@@ -15,7 +15,10 @@ describe TextToNoise::Mapping do
       mapping.matcher_proc.should be_a( Proc )
     end
 
-    it "allows the 'every' option to be specified in the Hash"
+    it "allows the 'every' option to be specified in the Hash" do
+      mapping = described_class.new /exp/ => "target", :every => 3
+      mapping.matcher_conditions.should_not be_empty
+    end
   end
 
   describe "#===" do
