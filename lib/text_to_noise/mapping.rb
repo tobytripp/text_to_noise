@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 module TextToNoise
   class Mapping
     include Logging
@@ -15,6 +16,8 @@ module TextToNoise
       end
 
       @matcher_proc = block if block_given?
+      @call_count = 0
+      @iteration_count = 1
     end
 
     def ===( other )
@@ -37,15 +40,27 @@ module TextToNoise
         s = sound
         s += ".wav" unless sound =~ /.wav$/
         self.targets << Proc.new {
-          info "#{@regex.inspect} -> #{sound}"
+          info "#{self.class.name} : #{@regex.inspect} -> #{sound}"
           TextToNoise.player.play s
         }
       end
+
+      self
     end
 
+    def every( iteration_count )
+      @iteration_count = iteration_count if iteration_count > 0
+      self
+    end
+    
     def call()
-      debug "Calling '#{@regex.inspect}' target..."
-      target.call
+      debug "Calling '#{@regex.inspect}' target…"
+      @call_count += 1
+      if @iteration_count == 1 || (@call_count % @iteration_count == 0)
+        target.call
+      else
+        debug "\tSkipping…"
+      end
     end
 
     def targets() @targets ||= []; end

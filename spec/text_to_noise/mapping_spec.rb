@@ -11,16 +11,18 @@ describe TextToNoise::Mapping do
       mapping = described_class.new(  /exp/ => "target" ) { |md| true }
       mapping.matcher_proc.should be_a( Proc )
     end
+
+    it "allows the 'every' option to be specified in the Hash"
   end
 
   describe "#===" do
     context "when matching against a regex" do
       subject { described_class.new /green/ }
-      
+
       it "returns true when the input matches its regex" do
         subject.should === "green"
       end
-      
+
       it "returns false when the input does not match its regex" do
         subject.should_not === "blue"
       end
@@ -70,10 +72,67 @@ describe TextToNoise::Mapping do
       TextToNoise.player.should_receive( :play ).with "foo.wav"
       TextToNoise.player.should_receive( :play ).with "bar.wav"
       TextToNoise.player.should_receive( :play ).with "baz.wav"
-      
+
       subject.target.call
       subject.target.call
       subject.target.call
+    end
+
+    it "returns self" do
+      subject.to( "foo" ).should == subject
+    end
+  end
+
+  describe "#every" do
+    before { TextToNoise.player = double( TextToNoise::Player ) }
+
+    context "when passed the value '3'" do
+      subject { described_class.new( /green/ ).to( "red" ).every( 3 ) }
+
+      it "does not call the Player immediately" do
+        TextToNoise.player.should_not_receive( :play )
+        subject.call
+      end
+
+      it "only calls the Player on the given iteration" do
+        TextToNoise.player.should_receive( :play )
+        subject.call
+        subject.call
+        subject.call
+        subject.call
+        subject.call
+      end
+    end
+
+    context "when passed the value 1" do
+      subject { described_class.new( /green/ ).to( "red" ).every( 1 ) }
+
+      it "calls the player on every iteration" do
+        TextToNoise.player.should_receive( :play ).twice
+        subject.call
+        subject.call
+      end
+    end
+
+    context "when passed the value 0" do
+      subject { described_class.new( /green/ ).to( "red" ).every( 0 ) }
+
+      it "calls the player on every iteration" do
+        TextToNoise.player.should_receive( :play ).exactly(3).times
+        subject.call
+        subject.call
+        subject.call
+      end
+    end
+
+    context "when passed the value -1" do
+      subject { described_class.new( /green/ ).to( "red" ).every( 0 ) }
+
+      it "calls the player on every iteration" do
+        TextToNoise.player.should_receive( :play ).twice
+        subject.call
+        subject.call
+      end
     end
   end
 

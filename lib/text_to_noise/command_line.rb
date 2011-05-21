@@ -18,7 +18,7 @@ module TextToNoise
       TextToNoise.player = self.player
       TextToNoise.throttle_delay = @options[:throttle] if @options[:throttle]
       TextToNoise.throttle_delay = @options[:throttle] || DEFAULT_FILE_DELAY if @options[:input] != $stdin
-      TextToNoise.logger.level = Logger::DEBUG if @options[:debug]
+      TextToNoise.logger.level   = Logger::DEBUG if @options[:debug]
     rescue Errno::ENOENT => e
       raise ArgumentError, "Could not locate configuration file: '#{@options[:config]}'"
     end

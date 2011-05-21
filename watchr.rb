@@ -21,12 +21,7 @@ end
 
 def specs_matching( type, name )
   puts "looking for specs of #{name}"
-  matching_specs = Dir["spec/**/*#{name}*_spec.rb"]
-  if matching_specs.empty?
-    $stderr.puts "No matching specs found!  Did you NOT TEST THIS?!"
-  else
-    spec *matching_specs
-  end
+  spec *Dir["spec/**/*#{name}*_spec.rb"]
 end
 
 def run_all_tests
@@ -42,11 +37,9 @@ end
 watch( '^spec/[^/]*/(.*)_spec\.rb'     ) { |m| spec m[0] }
 watch( '^spec/spec_helper\.rb'         ) { |m| execute "rake spec" }
 watch( '^spec/support/.*'              ) { |m| execute "rake spec" }
-watch( '^lib/([^/]+)/(.*)\.rb'         ) { |m| specs_matching m[1], m[2]   }
+watch( '^app/([^/]+)/(.*)\.rb'         ) { |m| specs_matching m[1], m[2]   }
+watch( '^features/(.*)'                ) { |m| execute "cucumber #{m[0]}"  }
 watch( '^features/step_definitions/.*' ) { |m| execute "cucumber features" }
-watch( '^features/([^/]+\.feature)'    ) { |m|
-  execute "cucumber #{m[0]}" unless m[1].include? "step_definitions"
-}
 
 Signal.trap 'INT' do
   if @sent_an_int then
@@ -58,9 +51,4 @@ Signal.trap 'INT' do
     Kernel.sleep 1.5
     run_all_tests
   end
-end
-
-# Ctrl-\
-Signal.trap 'QUIT' do
-  run_all_tests
 end
