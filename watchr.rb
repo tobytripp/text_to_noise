@@ -6,7 +6,9 @@
 #
 begin
   require "g"
+  puts "Growl loaded"
 rescue LoadError
+  puts "No growl library found"
 end
 
 def announce( message )
@@ -32,6 +34,7 @@ end
 def execute( cmd )
   puts "> #{cmd}"
   system cmd
+  system 'date'
 end
 
 watch( '^spec/[^/]*/(.*)_spec\.rb'     ) { |m| spec m[0] }

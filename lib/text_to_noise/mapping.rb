@@ -16,8 +16,7 @@ module TextToNoise
       end
 
       @matcher_proc = block if block_given?
-      @call_count = 0
-      @iteration_count = 1
+      @matcher_conditions = []
     end
 
     def ===( other )
@@ -49,14 +48,14 @@ module TextToNoise
     end
 
     def every( iteration_count )
-      @iteration_count = iteration_count if iteration_count > 0
+      @matcher_conditions << IterationMappingCondition.new( iteration_count )
       self
     end
     
     def call()
       debug "Calling '#{@regex.inspect}' target…"
-      @call_count += 1
-      if @iteration_count == 1 || (@call_count % @iteration_count == 0)
+
+      if play?
         target.call
       else
         debug "\tSkipping…"
@@ -68,6 +67,13 @@ module TextToNoise
       @i = -1 unless @i
       @i = (@i + 1) % targets.size
       self.targets[@i]
+    end
+
+    private
+
+    def play?
+      return true if @matcher_conditions.empty?
+      @matcher_conditions.any? { |c| c.play? }
     end
   end
 end

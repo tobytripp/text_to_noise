@@ -133,6 +133,19 @@ describe TextToNoise::Mapping do
         subject.call
       end
     end
+
+    context "when called multiple times" do
+      subject do
+        described_class.new( /green/ ).to( "red" ).
+          every( 3 ).
+          every( 5 )
+      end
+
+      it "fires when any rule matches" do
+        TextToNoise.player.should_receive( :play ).exactly(3).times
+        8.times { subject.call }
+      end
+    end
   end
 
   describe "#when" do
