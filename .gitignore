@@ -3,6 +3,7 @@
 Gemfile.lock
 pkg/*
 tmp/*
+log/*
 
 # osx noise
 .DS_Store
