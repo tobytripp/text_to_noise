@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe TextToNoise::Mapping do
+
+  before { TextToNoise.player = double( TextToNoise::Player ) }
+  
   describe "#initialize" do
     it "can accept a Hash" do
       mapping = described_class.new /exp/ => "target"
@@ -46,8 +49,6 @@ describe TextToNoise::Mapping do
   describe "#to" do
     subject { described_class.new /green/ }
 
-    before { TextToNoise.player = double( TextToNoise::Player ) }
-
     it "sets the target of the mapping to a Proc" do
       subject.to( "bar" )
       subject.target.should be_a( Proc )
@@ -84,8 +85,6 @@ describe TextToNoise::Mapping do
   end
 
   describe "#every" do
-    before { TextToNoise.player = double( TextToNoise::Player ) }
-
     context "when passed the value '3'" do
       subject { described_class.new( /green/ ).to( "red" ).every( 3 ) }
 
@@ -133,6 +132,16 @@ describe TextToNoise::Mapping do
         subject.call
         subject.call
       end
+    end
+  end
+
+  describe "#when" do
+    context "given a Proc that returns true" do
+      it "plays the specified sound"
+    end
+    
+    context "given a Proc that returns false" do
+      it "does not play the specified sound"
     end
   end
 

@@ -110,3 +110,19 @@ Feature: Mapping input lines to sounds for playback
     When I run `text_to_noise -c sound_mapping -f input.long.log -m`
 
     Then the output should contain "Playing crickets.wav"
+
+  @wip
+  Scenario: Throttling with a Proc
+    Given a file named "sound_mapping" with:
+    """
+    map /Rendered (\w+) page/ => 'crickets', :when => lambda { |md| md[1] == 'B' }
+    """
+
+    And a file named "input.log" with:
+    """
+    Rendered A page
+    """
+    
+    When I run `text_to_noise -c sound_mapping -f input.short.log -m`
+
+    Then the output should not contain "Playing crickets.wav"
