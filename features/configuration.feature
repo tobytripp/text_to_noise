@@ -128,11 +128,11 @@ Feature: Mapping input lines to sounds for playback
 
     Then the output should not contain "Playing crickets.wav"
 
-  @wip
   Scenario: Adding sound directories
     Given a file named "sound_mapping" with:
     """
-    sound_path other_sounds
+    sound_path 'other_sounds'
+    map /Rendered/ => 'blurp'
     """
 
     And a directory named "other_sounds"
@@ -146,3 +146,6 @@ Feature: Mapping input lines to sounds for playback
     When I run `text_to_noise sound_mapping -f input.log -m`
 
     Then the output should contain "Playing blurp.wav"
+
+    @wip
+    Scenario: Set volume for a sound
