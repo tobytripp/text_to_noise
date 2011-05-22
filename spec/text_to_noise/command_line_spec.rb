@@ -2,11 +2,11 @@ require 'spec_helper'
 
 module TextToNoise
   describe TextToNoise::CommandLine do
-    let( :mapping ) { double( Mapping ) }
+    let( :mapping ) { double( NoiseMapping ) }
     let( :reader  ) { double( LogReader, :call => nil ) }
     
     before :each do
-      Mapper.stub!( :parse ).and_return mapping
+      Router.stub!( :parse ).and_return mapping
       LogReader.stub!( :new ).and_return reader
       File.stub!( :read ).with( "sound_map.rb" ).and_return "config"
     end
@@ -30,9 +30,9 @@ module TextToNoise
       end
 
       context "when given a 'config' option" do
-        it "instantiates a Mapping object with the specified configuration" do
+        it "instantiates a NoiseMapping object with the specified configuration" do
           File.should_receive( :read ).with( "sound_map.rb" ).and_return "config"
-          Mapper.should_receive( :parse ).with( "config" )
+          Router.should_receive( :parse ).with( "config" )
           
           CommandLine.new "sound_map.rb"
         end
@@ -76,7 +76,7 @@ module TextToNoise
         subject.run      
       end
 
-      it "passes an instance of a Mapping to the LogReader" do
+      it "passes an instance of a NoiseMapping to the LogReader" do
         LogReader.should_receive( :new ).with( anything, mapping )
         subject.run
       end

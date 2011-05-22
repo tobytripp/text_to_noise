@@ -16,7 +16,7 @@ module TextToNoise
 
       raise ArgumentError, "No configuration file provided." if configs.empty?
       
-      @mapping = Mapper.parse File.read( configs.first )
+      @mapping = Router.parse File.read( configs.first )
       
       TextToNoise.player = self.player
       TextToNoise.throttle_delay = @options[:throttle] if @options[:throttle]
