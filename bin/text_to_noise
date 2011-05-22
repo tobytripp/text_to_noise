@@ -62,7 +62,7 @@ Copy one of those into a file and pass it along to text_to_noise.
 For example:
 
   echo 'match /sshd.*Accepted/ => %w[rooster hawk chicken crow]' > ssh.sounds.rb
-  tail -f /var/log/secure.log | text_to_noise -c ssh.sounds.rb
+  tail -f /var/log/secure.log | text_to_noise ssh.sounds.rb
 
 Still having problems?
   Try logging an issue at https://github.com/tobytripp/text_to_noise/issues
