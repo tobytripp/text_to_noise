@@ -10,11 +10,6 @@ describe TextToNoise::NoiseMapping do
       mapping.target.should be_a( Proc )
     end
 
-    it "stores a passed block for use in later matching" do
-      mapping = described_class.new(  /exp/ => "target" ) { |md| true }
-      mapping.matcher_proc.should be_a( Proc )
-    end
-
     it "allows the 'every' option to be specified in the Hash" do
       mapping = described_class.new /exp/ => "target", :every => 3
       mapping.matcher_conditions.should_not be_empty
@@ -91,49 +86,46 @@ describe TextToNoise::NoiseMapping do
     context "when passed the value '3'" do
       subject { described_class.new( /green/ ).to( "red" ).every( 3 ) }
 
-      it "does not call the Player immediately" do
-        TextToNoise.player.should_not_receive( :play )
-        subject.call
+      it "does not match immediately" do
+        subject.should_not === 'green'
       end
 
-      it "only calls the Player on the given iteration" do
-        TextToNoise.player.should_receive( :play )
-        subject.call
-        subject.call
-        subject.call
-        subject.call
-        subject.call
+      it "only matches on the given iteration" do
+        subject.should_not === 'green'
+        subject.should_not === 'green'
+        subject.should === 'green'
+        subject.should_not === 'green'
+        subject.should_not === 'green'
       end
     end
 
     context "when passed the value 1" do
       subject { described_class.new( /green/ ).to( "red" ).every( 1 ) }
 
-      it "calls the player on every iteration" do
-        TextToNoise.player.should_receive( :play ).twice
-        subject.call
-        subject.call
+      it "matches on every iteration" do
+        subject.should === 'green'
+        subject.should === 'green'
+        subject.should === 'green'
       end
     end
 
     context "when passed the value 0" do
       subject { described_class.new( /green/ ).to( "red" ).every( 0 ) }
 
-      it "calls the player on every iteration" do
-        TextToNoise.player.should_receive( :play ).exactly(3).times
-        subject.call
-        subject.call
-        subject.call
+      it "matches on every iteration" do
+        subject.should === 'green'
+        subject.should === 'green'
+        subject.should === 'green'
       end
     end
 
     context "when passed the value -1" do
       subject { described_class.new( /green/ ).to( "red" ).every( 0 ) }
 
-      it "calls the player on every iteration" do
-        TextToNoise.player.should_receive( :play ).twice
-        subject.call
-        subject.call
+      it "matches on every iteration" do
+        subject.should === 'green'
+        subject.should === 'green'
+        subject.should === 'green'
       end
     end
 
@@ -145,19 +137,29 @@ describe TextToNoise::NoiseMapping do
       end
 
       it "fires when any rule matches" do
-        TextToNoise.player.should_receive( :play ).exactly(3).times
-        8.times { subject.call }
+        TextToNoise.player.should_receive( :play ).exactly( 3 ).times
+        8.times { subject.call if subject === "green" }
       end
     end
   end
 
   describe "#when" do
+    let( :player ) { TextToNoise.player }
+    
     context "given a Proc that returns true" do
-      it "plays the specified sound"
+      subject { described_class.new( /blue/ ).to( "green" ).when { true } }
+      
+      it "will match the given input" do
+        subject.should === "blue"
+      end
     end
     
     context "given a Proc that returns false" do
-      it "does not play the specified sound"
+      subject { described_class.new( /blue/ ).to( "green" ).when { false } }
+
+      it "does not match the input" do
+        subject.should_not === "blue"
+      end
     end
   end
 

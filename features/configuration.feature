@@ -112,11 +112,11 @@ Feature: Mapping input lines to sounds for playback
 
     Then the output should contain "Playing crickets.wav"
 
-  @wip
   Scenario: Throttling with a Proc
     Given a file named "sound_mapping" with:
     """
-    map /Rendered (\w+) page/ => 'crickets', :when => lambda { |md| md[1] == 'B' }
+    map( /Rendered (\w+) page/ ).to( 'frogs' ).when { |md| md[1] == 'A' }
+    map( /Rendered (\w+) page/ ).to( 'crickets' ).when { |md| md[1] == 'B' }
     """
 
     And a file named "input.log" with:
@@ -127,6 +127,7 @@ Feature: Mapping input lines to sounds for playback
     When I run `text_to_noise sound_mapping -f input.log -m`
 
     Then the output should not contain "Playing crickets.wav"
+     But the output should contain "Playing frogs.wav"
 
   Scenario: Adding sound directories
     Given a file named "sound_mapping" with:

@@ -2,7 +2,7 @@
 module TextToNoise
   class NoiseMapping
     include Logging
-    attr_accessor :targets, :matcher_proc, :matcher_conditions
+    attr_accessor :targets, :matcher_conditions
     
     def initialize( expression_or_map, &block )
       debug "Parsing expression: #{expression_or_map.inspect}"
@@ -30,16 +30,12 @@ module TextToNoise
       raise ArgumentError,
       "Bad configuration line.  Missing match expression in \"#{expression_or_map.inspect}\"" if @regex.nil?
 
-      @matcher_proc = block if block_given?
+      matcher_conditions << block if block_given?
     end
 
     def ===( other )
       match_data = @regex.match( other )
-      if matcher_proc
-        match_data && matcher_proc.call( match_data )
-      else
-        not match_data.nil?
-      end
+      !match_data.nil? && play?( match_data )
     end
 
     def to( sound_or_sounds )
@@ -65,15 +61,15 @@ module TextToNoise
       @matcher_conditions << IterationMappingCondition.new( iteration_count )
       self
     end
+
+    def when( &clause )
+      @matcher_conditions << clause
+      self
+    end
     
     def call()
       debug "Calling '#{@regex.inspect}' target…"
-
-      if play?
-        target.call
-      else
-        debug "\tSkipping…"
-      end
+      target.call
     end
 
     def targets() @targets ||= []; end
@@ -85,9 +81,9 @@ module TextToNoise
 
     private
 
-    def play?
+    def play?( match_data )
       return true if @matcher_conditions.empty?
-      @matcher_conditions.any? { |c| c.play? }
+      @matcher_conditions.any? { |c| c.call match_data }
     end
   end
 end

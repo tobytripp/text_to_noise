@@ -7,11 +7,12 @@ module TextToNoise
       @iteration = 0
     end
     
-    def play?()
+    def play?( match_data=nil )
       @iteration += 1
       count == 1 || (@iteration % count == 0)
     end
-
+    alias_method :call, :play?
+    
     def count=( new_count )
       if new_count > 0
         @count = new_count
