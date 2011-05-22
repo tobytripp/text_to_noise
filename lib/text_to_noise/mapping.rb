@@ -5,8 +5,11 @@ module TextToNoise
     attr_accessor :targets, :matcher_proc, :matcher_conditions
     
     def initialize( expression_or_map, &block )
-      @matcher_conditions = []
+      debug "Parsing expression: #{expression_or_map.inspect}"
 
+      @matcher_conditions = []
+      @regex = nil
+      
       case expression_or_map
       when Regexp
         @regex = expression_or_map
@@ -23,6 +26,9 @@ module TextToNoise
       else
         raise ArgumentError, "Unrecognized Mapping configuration: #{expression_or_map.inspect}"
       end
+
+      raise ArgumentError,
+      "Bad configuration line.  Missing match expression in \"#{expression_or_map.inspect}\"" if @regex.nil?
 
       @matcher_proc = block if block_given?
     end

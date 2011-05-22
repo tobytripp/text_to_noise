@@ -61,17 +61,6 @@ module TextToNoise
           Mapper.parse config
         end
       end
-
-      context "given a hash-style configuration with multiple mappings" do
-        let( :config ) { "match /brown/ => \"blue\", /green/ => \"red\"\n" }
-
-        it "configures both mappings" do
-          Mapping.should_receive( :new ).with( /brown/ => "blue" ).and_return mapping
-          Mapping.should_receive( :new ).with( /green/ => "red"  ).and_return mapping
-          
-          Mapper.parse config
-        end
-      end
     end
 
     describe "#dispatch" do

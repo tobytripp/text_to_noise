@@ -19,8 +19,6 @@ arg_parser = OptionParser.new do |opts|
   
   opts.on( "-f", "--file FILE",
     "Read input from FILE.  Defaults to stdin" ) { |f| options[:input] = File.open( f, "r" ) }
-  opts.on( "-c", "--config MAPPING_CONFIG",
-    "Read input to sound mapping configuration from MAPPING_CONFIG" ) { |c| options[:config] = c }
   opts.on( "-m", "--mute",
     "Don't play any sounds, just print what matched" ) { options[:mute] = true }
   opts.on( "-t", "--throttle DELAY",
@@ -32,18 +30,18 @@ arg_parser = OptionParser.new do |opts|
   end
 end
 
-arg_parser.parse!
+mapping_files = arg_parser.parse!
 
 begin
-  TextToNoise::CommandLine.new( options ).run
-rescue ArgumentError
+  TextToNoise::CommandLine.new( mapping_files, options ).run
+rescue ArgumentError => e
   $stderr.puts arg_parser
   $stderr.puts <<-EOS
 
 ERROR!
 
-Could not locate a noise configuration.
-Specify a configuration with the -c option.
+Error parsing configuration file, or configuration missing.
+\t#{e}
 
 Try this one if you're processing a Rails log:
 

@@ -15,7 +15,7 @@ Feature: Mapping input lines to sounds for playback
 
     """
 
-    When I run `text_to_noise --config sound_mapping.rb --file stuff.log --mute`
+    When I run `text_to_noise sound_mapping.rb --file stuff.log --mute`
 
     Then the output should contain:
     """
@@ -25,7 +25,8 @@ Feature: Mapping input lines to sounds for playback
   Scenario: Using a Hash to specify mappings
     Given a file named "sound_mapping.rb" with:
     """
-    map /caw/ => "crow", /bakawk/ => "chicken"
+    map /caw/    => "crow"
+    map /bakawk/ => "chicken"
     """
 
     And a file named "input.log" with:
@@ -34,7 +35,7 @@ Feature: Mapping input lines to sounds for playback
     bakawk!
     """
 
-    When I run `text_to_noise -c sound_mapping.rb -f input.log -m`
+    When I run `text_to_noise sound_mapping.rb -f input.log -m`
 
     Then the output should contain "Playing crow.wav"
      And the output should contain "Playing chicken.wav"
@@ -58,7 +59,7 @@ Feature: Mapping input lines to sounds for playback
     User Load (7.1ms)
     """
 
-    When I run `text_to_noise -c sound_mapping.rb -f input.log -m`
+    When I run `text_to_noise sound_mapping.rb -f input.log -m`
     
     Then the output should contain "Playing slow_query.wav"
      And the output should not contain "Playing slow_request.wav"
@@ -66,7 +67,8 @@ Feature: Mapping input lines to sounds for playback
   Scenario: Inputs that match multiple rules should fire all sounds
     Given a file named "sound_mapping.rb" with:
     """
-    map /caw/ => "crow", /bakawk/ => "chicken"
+    map /caw/    => "crow"
+    map /bakawk/ => "chicken"
     """
 
     And a file named "input.log" with:
@@ -74,14 +76,13 @@ Feature: Mapping input lines to sounds for playback
     caw    bakawk!
     """
 
-    When I run `text_to_noise -c sound_mapping.rb -f input.log -m`
+    When I run `text_to_noise sound_mapping.rb -f input.log -m`
 
     Then the output should contain "Playing crow.wav"
      And the output should contain "Playing chicken.wav"
 
-  @wip
   Scenario: Throttling a match
-    Given a file named "sound_mapping" with:
+    Given a file named "sound_mapping.rb" with:
     """
     map /Rendered/ => 'crickets', :every => 5
     map( /page/ ).to( 'crickets' ).every( 5 )
@@ -103,11 +104,11 @@ Feature: Mapping input lines to sounds for playback
     Rendered a page
     """
 
-    When I run `text_to_noise -c sound_mapping -f input.short.log -m`
+    When I run `text_to_noise sound_mapping.rb -f input.short.log -m`
 
     Then the output should not contain "Playing crickets.wav"
 
-    When I run `text_to_noise -c sound_mapping -f input.long.log -m`
+    When I run `text_to_noise sound_mapping.rb -f input.long.log -m`
 
     Then the output should contain "Playing crickets.wav"
 
@@ -123,6 +124,25 @@ Feature: Mapping input lines to sounds for playback
     Rendered A page
     """
     
-    When I run `text_to_noise -c sound_mapping -f input.short.log -m`
+    When I run `text_to_noise sound_mapping -f input.log -m`
 
     Then the output should not contain "Playing crickets.wav"
+
+  @wip
+  Scenario: Adding sound directories
+    Given a file named "sound_mapping" with:
+    """
+    sound_path other_sounds
+    """
+
+    And a directory named "other_sounds"
+    And an empty file named "blurp.wav"
+
+    And a file named "input.log" with:
+    """
+    Rendered a page
+    """
+
+    When I run `text_to_noise sound_mapping -f input.log -m`
+
+    Then the output should contain "Playing blurp.wav"

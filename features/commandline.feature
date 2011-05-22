@@ -8,9 +8,6 @@ Feature: Running text_to_noise
 
     Then the output should contain:
     """
-    Could not locate a noise configuration.
-    Specify a configuration with the -c option.
-
     Try this one if you're processing a Rails log:
 
       match /User Load/     => "nightingale"

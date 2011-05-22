@@ -25,15 +25,9 @@ module TextToNoise
     protected
 
     def match( expression, &block )
-      if expression.kind_of?( Hash ) && expression.size > 1
-        expression.each do |k,v|
-          match k => v
-        end
-      else
-        debug "Creating map for #{expression.inspect}"
-        mappings << mapping = Mapping.new( expression, &block )
-        mapping
-      end
+      debug "Creating map for #{expression.inspect}"
+      mappings << mapping = Mapping.new( expression, &block )
+      mapping
     end
     alias_method :map, :match
   end

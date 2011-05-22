@@ -13,7 +13,7 @@ module TextToNoise
 
     describe "#initialize" do
       it "accepts an options object" do
-        CommandLine.new( { :config => "sound_map.rb" } )
+        CommandLine.new "sound_map.rb", {}
       end
       
       it "throws an error if no config file is given" do
@@ -25,7 +25,7 @@ module TextToNoise
       it "raises an error if the config file cannot be found" do
         File.stub!( :read ).and_raise Errno::ENOENT
         lambda {
-          CommandLine.new :config => "not_found"
+          CommandLine.new "not_found"
         }.should raise_error( ArgumentError )
       end
 
@@ -34,36 +34,36 @@ module TextToNoise
           File.should_receive( :read ).with( "sound_map.rb" ).and_return "config"
           Mapper.should_receive( :parse ).with( "config" )
           
-          CommandLine.new :config => "sound_map.rb"
+          CommandLine.new "sound_map.rb"
         end
       end
 
       context "when given the 'mute' option" do
         it "sets the global Player to an instance of MutePlayer" do
           TextToNoise.should_receive( :player= ).with instance_of( MutePlayer )
-          CommandLine.new :mute => true, :config => "sound_map.rb"
+          CommandLine.new "sound_map.rb", :mute => true
         end
       end
 
       context "when given the 'throttle' option" do
         it "sets the throttle_delay attribute on TextToNoise" do
           TextToNoise.should_receive( :throttle_delay= ).with 100
-          CommandLine.new :config => "sound_map.rb", :throttle => 100
+          CommandLine.new "sound_map.rb", :throttle => 100
         end
       end
 
       context "when given a 'file' option" do
         it "sets a default throttle_delay" do
           TextToNoise.should_receive( :throttle_delay= ).with 100
-          CommandLine.new :config => "sound_map.rb", :input => "sample.log"
+          CommandLine.new "sound_map.rb", :input => "sample.log"
         end
       end
     end
 
     describe "#run" do
-      let( :options ) { Hash[:input, :io, :config, "sound_map.rb"] }
+      let( :options ) { Hash[:input, :io] }
       
-      subject { CommandLine.new( options ) }
+      subject { CommandLine.new( "sound_map.rb", options ) }
 
       
       it "creates a new LogReader object" do

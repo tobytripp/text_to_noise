@@ -7,20 +7,23 @@ module TextToNoise
 
     DEFAULT_FILE_DELAY = 100
     
-    def initialize( options={} )
+    def initialize( mapping_configurations, options={} )
       @options = {
         :input  =>  $stdin
       }.merge options
 
-      raise ArgumentError, "No configuration file provided." unless @options[:config]
+      configs = Array === mapping_configurations ? mapping_configurations : [mapping_configurations]
+
+      raise ArgumentError, "No configuration file provided." if configs.empty?
       
-      @mapping = Mapper.parse File.read( @options[:config] )
+      @mapping = Mapper.parse File.read( configs.first )
+      
       TextToNoise.player = self.player
       TextToNoise.throttle_delay = @options[:throttle] if @options[:throttle]
       TextToNoise.throttle_delay = @options[:throttle] || DEFAULT_FILE_DELAY if @options[:input] != $stdin
       TextToNoise.logger.level   = Logger::DEBUG if @options[:debug]
     rescue Errno::ENOENT => e
-      raise ArgumentError, "Could not locate configuration file: '#{@options[:config]}'"
+      raise ArgumentError, "Could not locate configuration file: '#{configs.first}' (#{e})"
     end
     
     def run
