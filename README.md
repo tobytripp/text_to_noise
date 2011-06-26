@@ -83,7 +83,7 @@ Additional patterns may be added with the `when` condition:
 
 The sound will play if _any_ of the given conditions match.
 
-Since the configuration file is Ruby, you could conceivable do just about
+Since the configuration file is Ruby, you could conceivably do just about
 anything you want in the condition block.
 
 

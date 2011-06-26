@@ -2,12 +2,13 @@
 module TextToNoise
   class NoiseMapping
     include Logging
-    attr_accessor :targets, :matcher_conditions
+    attr_accessor :targets, :matcher_conditions, :filter_conditions
     
     def initialize( expression_or_map, &block )
       debug "Parsing expression: #{expression_or_map.inspect}"
 
       @matcher_conditions = []
+      @filter_conditions = []
       @regex = nil
       
       case expression_or_map
@@ -31,6 +32,7 @@ module TextToNoise
       "Bad configuration line.  Missing match expression in \"#{expression_or_map.inspect}\"" if @regex.nil?
 
       matcher_conditions << block if block_given?
+      filter_conditions << Conditions::ThrottledMatchCondition.new
     end
 
     def ===( other )
@@ -58,7 +60,7 @@ module TextToNoise
     end
 
     def every( iteration_count )
-      @matcher_conditions << IterationMappingCondition.new( iteration_count )
+      @matcher_conditions << Conditions::IterationMappingCondition.new( iteration_count )
       self
     end
 
@@ -74,6 +76,7 @@ module TextToNoise
 
     def targets() @targets ||= []; end
     def target()
+      raise "No Sound mapped for rule: '#{@regex.inspect}'" if targets.empty?
       @i = -1 unless @i
       @i = (@i + 1) % targets.size
       self.targets[@i]
@@ -82,6 +85,7 @@ module TextToNoise
     private
 
     def play?( match_data )
+      return false unless @filter_conditions.all? { |c| c.call match_data }
       return true if @matcher_conditions.empty?
       @matcher_conditions.any? { |c| c.call match_data }
     end

@@ -115,8 +115,9 @@ Feature: Mapping input lines to sounds for playback
   Scenario: Throttling with a Proc
     Given a file named "sound_mapping" with:
     """
-    map( /Rendered (\w+) page/ ).to( 'frogs' ).when { |md| md[1] == 'A' }
+    map( /Rendered (\w+) page/ ).to( 'frogs'    ).when { |md| md[1] == 'A' }
     map( /Rendered (\w+) page/ ).to( 'crickets' ).when { |md| md[1] == 'B' }
+
     """
 
     And a file named "input.log" with:

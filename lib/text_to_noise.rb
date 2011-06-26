@@ -4,7 +4,7 @@ $LOAD_PATH << LIB_DIR
 
 require 'logger'
 
-Dir["#{LIB_DIR}/text_to_noise/*.rb"].each { |lib|
+Dir["#{LIB_DIR}/text_to_noise/**/*.rb"].each { |lib|
   lib =~ %r<lib/(.*)\.rb$>
   require $1
 }

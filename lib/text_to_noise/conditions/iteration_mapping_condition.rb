@@ -1,4 +1,4 @@
-module TextToNoise
+module TextToNoise::Conditions
   class IterationMappingCondition
     attr_accessor :count
     

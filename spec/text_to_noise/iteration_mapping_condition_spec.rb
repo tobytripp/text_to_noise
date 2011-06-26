@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe TextToNoise::IterationMappingCondition do
+describe TextToNoise::Conditions::IterationMappingCondition do
   describe "construction" do
     it "accepts a count" do
       described_class.new 4

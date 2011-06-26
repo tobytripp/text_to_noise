@@ -2,7 +2,13 @@ require 'spec_helper'
 
 describe TextToNoise::NoiseMapping do
 
-  before { TextToNoise.player = double( TextToNoise::Player ) }
+  before do
+    TextToNoise.player = double( TextToNoise::Player )
+    
+    now = Time.now
+    times = (0..60).map { |i| now + i }
+    Time.stub(:now) { times.shift }
+  end
   
   describe "#initialize" do
     it "can accept a Hash" do
@@ -40,6 +46,17 @@ describe TextToNoise::NoiseMapping do
 
       it "does not match if the block returns false" do
         should_not === "green 1"
+      end
+    end
+
+    context "throttling" do
+      subject { described_class.new( /green/ ) }
+      
+      it "prevents immediately consecutive matches" do
+        now = Time.now
+        Time.stub( :now ).and_return now
+        should === "green"
+        should_not === "green"
       end
     end
   end
@@ -120,7 +137,9 @@ describe TextToNoise::NoiseMapping do
     end
 
     context "when passed the value -1" do
-      subject { described_class.new( /green/ ).to( "red" ).every( 0 ) }
+      subject do
+        described_class.new( /green/ ).to( "red" ).every( 0 )
+      end
 
       it "matches on every iteration" do
         subject.should === 'green'
@@ -166,7 +185,7 @@ describe TextToNoise::NoiseMapping do
   describe "#call" do
     subject do
       described_class.new( /green/ ).tap do |mapping|
-        mapping.targets = [Proc.new { "called" }]
+        mapping.targets = [ Proc.new { "called" } ]
       end
     end
 
